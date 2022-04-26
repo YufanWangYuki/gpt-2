@@ -7,7 +7,7 @@ Inspired by [Model Cards for Model Reporting (Mitchell et al.)](https://arxiv.or
 
 ## Model Details.
 
-Our model is designed for Dialogue State Tracking(DST) which could recognize the dialogue acts for the entire dialogue. This model is built upon [HuggingFace model](https://huggingface.co/gpt2) with only fine-tuning on a small in-domain dataset after 200,000 bathes on the [MultiWOZ 2.1] (https://github.com/budzianowski/multiwoz/tree/master/data) dataset. 
+Our model is designed for Dialogue State Tracking(DST) which could recognize the dialogue acts for the entire dialogue. This model is built upon [HuggingFace model](https://huggingface.co/gpt2) with only fine-tuning on a small in-domain dataset after 200,000 bathes on the [MultiWOZ 2.1](https://github.com/budzianowski/multiwoz/tree/master/data) dataset. 
 
 ### Model type
 
