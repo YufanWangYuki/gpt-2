@@ -1,58 +1,32 @@
-**Status:** Archive (code is provided as-is, no updates expected)
+# GPT2DST Model Card
 
-# gpt-2
+Last updated: Last updated: April 2022
 
-Code and models from the paper ["Language Models are Unsupervised Multitask Learners"](https://d4mucfpksywv.cloudfront.net/better-language-models/language-models.pdf).
 
-You can read about GPT-2 and its staged release in our [original blog post](https://blog.openai.com/better-language-models/), [6 month follow-up post](https://openai.com/blog/gpt-2-6-month-follow-up/), and [final post](https://www.openai.com/blog/gpt-2-1-5b-release/).
+Inspired by [Model Cards for Model Reporting (Mitchell et al.)](https://arxiv.org/abs/1810.03993), we’re providing some accompanying information about the GPT-2 family of models we're releasing.
 
-We have also [released a dataset](https://github.com/openai/gpt-2-output-dataset) for researchers to study their behaviors.
+## Model Details.
 
-<sup>*</sup> *Note that our original parameter counts were wrong due to an error (in our previous blog posts and paper).  Thus you may have seen small referred to as 117M and medium referred to as 345M.*
+Our model is designed for Dialogue State Tracking(DST) which could recognize the dialogue acts for the entire dialogue. This model is built upon [HuggingFace model](https://huggingface.co/gpt2) with only fine-tuning on a small in-domain dataset after 200,000 bathes. 
 
-## Usage
+### Model type
 
-This repository is meant to be a starting point for researchers and engineers to experiment with GPT-2.
+Language model
 
-For basic information, see our [model card](./model_card.md).
+## To Use:
 
-### Some caveats
-
-- GPT-2 models' robustness and worst case behaviors are not well-understood.  As with any machine-learned model, carefully evaluate GPT-2 for your use case, especially if used without fine-tuning or in safety-critical applications where reliability is important.
-- The dataset our GPT-2 models were trained on contains many texts with [biases](https://twitter.com/TomerUllman/status/1101485289720242177) and factual inaccuracies, and thus GPT-2 models are likely to be biased and inaccurate as well.
-- To avoid having samples mistaken as human-written, we recommend clearly labeling samples as synthetic before wide dissemination.  Our models are often incoherent or inaccurate in subtle ways, which takes more than a quick read for a human to notice.
-
-### Work with us
-
-Please [let us know](mailto:languagequestions@openai.com) if you’re doing interesting research with or working on applications of GPT-2!  We’re especially interested in hearing from and potentially working with those who are studying
-- Potential malicious use cases and defenses against them (e.g. the detectability of synthetic text)
-- The extent of problematic content (e.g. bias) being baked into the models and effective mitigations
-
-## Development
-
-See [DEVELOPERS.md](./DEVELOPERS.md)
-
-## Contributors
-
-See [CONTRIBUTORS.md](./CONTRIBUTORS.md)
-
-## Citation
-
-Please use the following bibtex entry:
+We provide the ckpt of our model after 200,000 bathes. To inference on your data, you could use the follow command:
 ```
-@article{radford2019language,
-  title={Language Models are Unsupervised Multitask Learners},
-  author={Radford, Alec and Wu, Jeff and Child, Rewon and Luan, David and Amodei, Dario and Sutskever, Ilya},
-  year={2019}
-}
+    python gpt2-dst.py --hyp_dir OUTPUT \
+    --test_data DST_DATA --args DST_ARGS --checkpoint $CHECKPOINT -vv >> $LOG 2> $ERR
+    ```
+ where the hyp_dir is the folder hypothesis files are to be saved, DST_DATA is where you save you test data, DST_ARGS is the configuration of decoding, checkpoint is the trained model you want to inference on and '-vv' is the logging level you may want to use. You could also replace '-vv' with '-v' or '--quiet' as you like. We provide the default trained model and args configuration in the file, you could also alter the configuration as you like. Notice that the configuration file contains information like maximum sequence length and experiment name. You may need to alter this setting if you would like to inference our model on your own dataset.
+ 
+## To Train:
+To train you own model on your data, you could use the follow command:
 ```
+python $BDIR/train-gpt2-dst.py CT \
+ --train_data TRAIN_DATA --dev_data DEV_DATA --args TRAIN_ARGS -vv
+     ```
+CT is the pre-trained model, you could also delete it which means that you would like to tran a flat start model. TRAIN_DATA and DEV_DATA is where you save you train and development data, TRAIN_ARGS is the configuration of training, checkpoint, model settings and so on. You may need to alter the configuration file to you need. For example, the 'experiment_name' in this file will be the folder containing your model. Once the training process has been done, you could also test you model performance in the previous commands. Remember to alter the checkpoint filepath to you needs.
 
-## Future work
-
-We may release code for evaluating the models on various benchmarks.
-
-We are still considering release of the larger models.
-
-## License
-
-[Modified MIT](./LICENSE)
